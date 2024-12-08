@@ -12,7 +12,12 @@ import { Button } from '@/app/ui/button';
 import { useActionState } from 'react';
 import { createInvoice, State } from '@/app/lib/actions';
 
+// 我们使用的是服务器端验证, 表单数据被收集成 FormData 对象, formAction 被调用, 它会调用 server action(createInvoice)
+// 服务器端(createInvoice 函数) 接收到 FormData 数据, 使用 Zod 验证模式进行验证, 如果验证失败, 返回错误信息
+// 如果 createInvoice 返回了错误状态（比如验证错误），这个状态会被传回客户端并更新到 state
+// 这也是为什么我们可以通过 state.errors?.customerId 来访问错误信息的原因
 export default function Form({ customers }: { customers: CustomerField[] }) {
+  // 因为使用了 hook，当 state 改变时，该组件会重新渲染
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createInvoice, initialState);
 

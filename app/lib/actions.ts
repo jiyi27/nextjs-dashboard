@@ -38,7 +38,7 @@ export type State = {
     message?: string | null;
 };
 
-
+// create-form.tsx 中 useActionState 要求 action 函数接收两个参数, prevState 和 formData, 因此这里也要传入两个参数, 即使不使用 prevState
 export async function createInvoice(prevState: State, formData: FormData) {
     // Validate form fields using Zod
     const validatedFields = CreateInvoice.safeParse({
