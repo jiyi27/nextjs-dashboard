@@ -9,6 +9,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     const pathname = usePathname();  // returns the current path, not including the query string
     const { replace } = useRouter();
 
+    // debounce the search input to avoid making too many requests
     const handleSearch = useDebouncedCallback((term) => {
         const params = new URLSearchParams(searchParams);
         params.set('page', '1');
@@ -17,7 +18,10 @@ export default function Search({ placeholder }: { placeholder: string }) {
         } else {
             params.delete('query');
         }
-        replace(`${pathname}?${params.toString()}`); // replace the current URL with the new query string
+        // replace the current URL with the new query string
+        // such as: http://localhost:3000/dashboard/invoices?page=1&query=mi
+        // this will handled by the Page component which is /app/dashboard/invoices/page.tsx
+        replace(`${pathname}?${params.toString()}`);
     }, 600);
 
     return (

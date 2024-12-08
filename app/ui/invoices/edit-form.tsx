@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
+import { updateInvoice } from '@/app/lib/actions';
 
 export default function EditInvoiceForm({
   invoice,
@@ -17,8 +18,19 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  // 原始的 updateInvoice 函数需要两个参数：id 和 formData
+  // 使用 bind 创建了一个新函数 updateInvoiceWithId
+  // 第一个参数 null 是设置函数的 this 上下文,
+  // 第二个参数 invoice.id 被预设为 updateInvoice 的第一个参数
+  // bind 的第一个参数用于设置函数内部 this 的值
+  // 当函数不需要特定的 this 值时，我们就传入 null
+  // 原始调用方式: updateInvoice(invoice.id, formData);
+  // 新调用方式: updateInvoiceWithId(formData);
+  // 在服务器组件中,我们可以直接访问到 invoice.id, 通过 bind 预设这个值,我们就不需要在客户端再传递这个 id
+  // 这样可以避免把 id 暴露在客户端或者通过隐藏字段传递
+  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
   return (
-    <form>
+    <form action={updateInvoiceWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
